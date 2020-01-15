@@ -252,33 +252,186 @@ cookie3.setPath("/day15");  sex
 
 ### 1.3、 **代码实现** 
 
+```java
+@WebServlet("/visit")
+public class VisitServlet extends HttpServlet {
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+			//记录用户的访问时间
+		Date date = new Date();
+		//将当前访问时间存到cookie中
+		Cookie cookie = new Cookie("lastTime", date.getTime()+"");
+		response.addCookie(cookie);
+	}
+
+ @WebServlet("/show")
+public class ShowServlet extends HttpServlet {
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		response.setContentType("text/html;charset=utf-8");
+		Cookie lastTime = null;
+		//取出上次访问时间
+		Cookie [] cookies = request.getCookies();
+		if(cookies != null) {
+			for(Cookie cookie:cookies) {
+				//判断cookie名字是否等于lastTime
+				if("lastTime".equals(cookie.getName())) {
+					lastTime = cookie;
+				}
+			}
+		}
+		//将时间相应给浏览器
+		if(lastTime != null) {
+			String time = lastTime.getValue();
+			Date date = new Date(Long.parseLong(time));
+			response.getWriter().write("上次访问时间是："+date.toLocaleString());;
+		}
+	}
+```
+
+
+
 ## 2、 **案例二：一次性验证码的校验**
 
 ### **2.1、讲解：session**
 
 #### **2.1.1、session的简述**
 
+会话数据存在服务器端的技术
+
+和cookie的区别：
+
+​	cookie：存在浏览器端，存储数据量小，安全性低
+
+​	session：存在服务器端，存储数据量大，安全性高
+
 #### **2.1.2、session的入门案例**
 
 ##### **2.1.2.1、入门案例-获取session查看执行现象**
 
+request.getSession();
+
+当第一次执行getSession()，会在响应头生成一个名字为JSESSIONID的一个cookie
+
+当第二次以及以后执行getSession()，此时不再在响应头上生成JSESSION的cookie
+
+第二次以及右后的请求，会以请求头的形式将JSESSIONID携带过去
+
 ##### **2.1.2.2、入门案例-使用session进行数据共享**
+
+第三个域对象：
+
+```java
+//创建session对象
+		HttpSession session = request.getSession();
+		session.setAttribute("uname", "xiaohong");
+HttpSession session = request.getSession();
+		String uname = (String)session.getAttribute("uname");
+		System.out.println(uname);
+```
+
+
+
+新打开一个浏览器，此时就是一个新的会话，拿到的就是一个新的session对象
+
+浏览器关闭，会话结束。JSESSIONID销毁(会话级别的cookie)
 
 #### **2.1.3、session的原理** 
 
+![4](image/4.png)
+
 #### 2.1.4、session的生命周期
 
-#### **2.1.5、session常用API**
+创建：第一次调用request.getSession();
+
+销毁：
+
+- 非正常关闭服务器时销毁session
+
+​	正常关闭，会将session序列化到指定的硬盘空间中
+
+G:\java\apache-tomcat-8.5.29\work\Catalina\localhost\day15
+
+​	再次启动时，反序列化到服务器中
+
+- 手动调用invalidate()  可以销毁session
+
+- 不操作session，30分钟后自动销毁
+
+  tomcat/conf/web.xml
+
+  ```java
+     <session-config>
+    <session-timeout>30</session-timeout>
+    单位：分钟
+  </session-config>
+  ```
+
+ServletContext、request、session（三个域对象）、Servlet	
+
+#### 2.1.5、session常用API
+
+public void invalidate();
+
+public void setAttribute(String name, Object value);
+
+get....、removeA..
 
 ### **2.2、流程分析** 
 
 ### **2.3、案例代码实现**
 
+login.html
+
+```html
+<form action="/day15/check" method="get">
+		用户名：<input type="text" name="username" /><br/>
+		密码：<input type="password" name="password" /><br/>
+		验证码：<input type="text" name="code"/>
+		<img src="/day15/vs" id="img" onclick="changeImg()"><br>
+		<input type="submit" value="提交" />
+	</form>
+```
+
+V.codeServle：
+
+![5](image/5.png)
+
+CheckServlet：
+
+```java
+protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		//获取输入框的验证码
+		String code = request.getParameter("code");
+		//获取session中的验证码
+		String msg = (String)request.getSession().getAttribute("msg");
+		//作废验证码(一次性)
+		request.getSession().removeAttribute("msg");
+		if(code != null && code.equalsIgnoreCase(msg)) {
+			System.out.println("验证码正确！！");
+		}else {
+			System.out.println("验证码错误");
+		}
+	}
+```
+
 
 
  
 
- 
+ 作业1：登录
+
+​	登录成功：跳转到首页，在首页上显示：欢迎您：xxx(lucy)
+
+​	登录失败：跳转到失败页面，在页面上显示您输入的用户名或者密码不正确
+
+作业2：<a href="">查询所有用户</>
+
+​	将数据库中所有用户查询来，展示到页面上！！(用表格进行展示)
+
+​	用户id          用户名         性别          生日
+
+​	1                  lucy                  女         1990-12
+
+
 
  
 
