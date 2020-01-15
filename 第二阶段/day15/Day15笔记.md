@@ -113,19 +113,86 @@ cookie是浏览器和服务器传递的一张小纸条
 
 ##### **1.2.2.1、入门案例1：服务器给浏览器写cookie**
 
+```java
+//1、创建cookie对象
+		Cookie cookie = new Cookie("uname", "lucy");
+		//2、将cookie写给浏览器
+		resp.addCookie(cookie);   //以响应头的形式将cookie写过来，浏览器存储cookie 
+```
+
+服务器关闭会不会销毁cookie ：不会
+
+浏览器关闭会不会销毁:会(默认存储在浏览器内存中)
+
+#### 1.2.2.2、入门案例2：浏览器携带cookie，服务器解析
+
+```java
+//1、获取所有的cookie
+		Cookie [] cookies = req.getCookies();
+		//2、获取cookie的名字和值
+		if(cookies != null) {
+			for(Cookie cookie : cookies) {
+				//获取cookie名字
+				String name = cookie.getName();
+				String value = cookie.getValue();
+				System.out.println(name+":"+value);
+			}
+		}
+```
+
+cookie随着浏览器的关闭而销毁，新打开一个浏览器是没有之前的cookie的
+
 ##### 1.2.2.2、入门案例2：浏览器把cookie传递给服务器，服务器解析	
 
 #### **1.2.3、cookie原理**
 
+![2](image/3.png)
+
 #### **1.2.4、cookie使用注意  **
+
+cookie存储数据是有限的：一般不超过4kb
+
+一个网站的cookie数量是有限的：20-30个
+
+一个浏览器上cookie数量也是有限的：200-300个
+
+
+
+cookie应用场景：
+
+​	1、浏览的历史记录(将商品的id存在cookie中)
+
+​	2、七天自动登录(将用户名和密码存在cookie中)
 
 #### **1.2.5、cookie种类**
 
-| 方法名                       | 描述                                       |
-| ------------------------- | ---------------------------------------- |
-| **setMaxAge**(int expiry) | 设置cookie的生存时间。单位：秒-1：会话级别的cookie(默认)0：立即过期(不会设置)1:1秒 |
+分类：
 
-#### **1.2.6、cookie的有效路径**
+​	会话级别的cookie：cookie存在浏览器内存中，随着浏览器的关闭而销毁(默认)
+
+​	持久化级别的cookie：设置cookie的生存时间，cookie存在浏览器指定的硬盘空间中
+
+​						只有时间没到期，cookie就会一直存在
+
+设置cookie的生存时间：
+
+| 方法名                       | 描述             |
+| ------------------------- | -------------- |
+| **setMaxAge**(int expiry) | 设置cookie的生存时间。 |
+
+int的取值：
+
+​	负数：会话级别的cookie
+
+​	0：立即过期
+
+​	正数：存活的时间        单位：秒
+
+七天自动登录：
+
+​	setMaxAge(60x60x24x7);
+
+#### 1.2.6、cookie的有效路径
 
 浏览器将cookie保存硬盘的路径，是各个浏览器自己制定，其他无法进行操作的。
 
@@ -138,6 +205,50 @@ cookie是浏览器和服务器传递的一张小纸条
 | 方法名                               | 描述                                       |
 | --------------------------------- | ---------------------------------------- |
 | **setPath**(java.lang.String uri) | 设置有效路径。设置cookie允许被访问的路径。 携带cookie：访问设置的路径，以及子路径都被允许访问。 |
+
+setPath("/aa")  访问/aa路径以及子路径时才会携带cookie
+
+cookie1.setPath("/day15/aa");   uname
+
+cookie2.setPath("/day15/aa/bb");  pwd
+
+cookie3.setPath("/day15");  sex
+
+访问路径1：http://localhost:8080/day15/
+
+​	携带一个cookie：sex
+
+访问路径2：http://localhost:8080/day15/qqq
+
+携带一个cookie：sex
+
+访问路径3：http://localhost:8080/day15/aa/www
+
+携带两个cookie：uname、sex
+
+访问路径4：http://localhost:8080/day15/aa/bb/www
+
+携带三个cookie：uname\pwd sex
+
+访问路径5：http://localhost:8080/day16
+
+携带0个
+
+
+
+不设置有效路径时：
+
+​	是否默认是setPath("/day15")？  非也
+
+如果Sevlet设置了该路径：@WebServlet("/www/cookie3")
+
+只有访问/www目录下的路径才会携带cookie
+
+
+
+需求：访问该项目下的所有资源都携带该cookie
+
+手动设置：cookie.setPath(/项目名)
 
 ### 1.3、 **代码实现** 
 
