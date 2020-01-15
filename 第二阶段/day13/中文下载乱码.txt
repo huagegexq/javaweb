@@ -1,0 +1,24 @@
+/**
+	 * 解决中文下载乱码工具
+	 * @param fileName 需要解决乱码的文件名
+	 * @param request
+	 * @return
+	 */
+	public static String base64EncodeFileName(String fileName,HttpServletRequest request) throws UnsupportedEncodingException {
+		String result = fileName;
+		String agent = request.getHeader("User-Agent");
+		if(agent.contains("Firefox")){
+			BASE64Encoder base64Encoder = new BASE64Encoder();
+			try {
+				result="=?UTF-8?B?"
+						+ new String(base64Encoder.encode(result
+								.getBytes("UTF-8"))) + "?=";
+			} catch (UnsupportedEncodingException e) {
+				e.printStackTrace();
+				throw new RuntimeException(e);
+			}
+		}else{
+			result = URLEncoder.encode(result,"UTF-8");
+		}
+		return result;
+	}

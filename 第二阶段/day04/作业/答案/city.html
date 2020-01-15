@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<script>
+		// 定义二维数组,存储城市信息
+		var cities = new Array();
+		cities[0] = new Array("海淀区","昌平区","朝阳区");
+		cities[1] = new Array("郑州市","开封市","洛阳市","平顶山市");
+		cities[2] = new Array("济南市","青岛市","烟台市","潍坊市","淄博市");
+		cities[3] = new Array("石家庄市","唐山市","邯郸市","廊坊市");
+		cities[4] = new Array("南京市","苏州市","扬州市","宿迁市");
+		
+		function changeCity(val){
+			// val  省份的下标
+			//获取对应的城市信息
+			var arr = cities[val];
+			//将城市信息添加到id为city的下拉框里
+				//获取id为city的城市对象
+				var city = document.getElementById("city");
+				//先清空
+				city.innerHTML = "<option value=''>----请-选-择-市----</option>"
+				//将城市信息追加到city对象里
+				//遍历城市信息
+				for(var i=0;i<arr.length;i++){
+					var temp = "<option>"+arr[i]+"</option>"
+					//追加
+					city.innerHTML += temp;
+				}
+				
+		}
+	</script>
+	<body>
+		<select id="province" onchange="changeCity(this.value)" style="width:150px">
+			<option value="">----请-选-择-省----</option>
+			<option value="0">北京</option>
+			<option value="1">河南省</option>
+			<option value="2">山东省</option>
+			<option value="3">河北省</option>
+			<option value="4">江苏省</option>
+		</select>
+		<select id="city" style="width:150px">
+			<option value="">----请-选-择-市----</option>
+		</select>
+	</body>
+</html>

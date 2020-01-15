@@ -1,0 +1,6 @@
+ $(function () {
+        $("#btn1").click(function () {
+            //创建一行和两个单元格
+            $('<tr><td>' + $('#txt').val() + '</td><td>' + $('#textContent').val() + '</td></tr>').appendTo($("#tb"));
+        });
+    });

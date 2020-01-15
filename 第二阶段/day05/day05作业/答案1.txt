@@ -1,0 +1,5 @@
+$(function() {
+			$(arr1).each(function(i) {
+			$("#s1").append("<option value='"+arr1[i]+"'>"+arr1[i]+"</option>");
+			})
+		});

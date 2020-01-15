@@ -1,0 +1,21 @@
+p	{
+	font-size:12px;
+}
+
+h2 {
+	font-size:18px; 
+	color:red;
+}
+
+.green {
+	color:green;
+}
+
+.blue {
+	color:blue;
+}
+
+#first {
+	font-size:24px; 
+	color:green;
+}

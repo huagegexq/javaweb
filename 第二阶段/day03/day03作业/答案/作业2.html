@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>浏览器对象</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	</head>
+	<body>
+		<strong>操作成功!!</strong>
+		<br />
+		<span id="time">5</span>秒后回到主页
+		<a href="http://www.baidu.com">返回</a>
+		<script type="text/javascript">
+			var t = 5;
+			timer = setInterval(refresh, 1000);
+			function refresh() {
+				document.getElementById("time").innerHTML = --t;
+				if (t == 1) {
+					clearInterval(timer);
+					location.href = "http://www.baidu.com";
+				}
+			}
+		</script>
+	</body>
+</html>

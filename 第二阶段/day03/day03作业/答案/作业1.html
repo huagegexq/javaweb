@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		
+	</head>
+	<body>
+		<form name="mymax">
+			数值1：<input type="text"   id="num1"><br/>
+			数值2：<input type="text"   id="num2"><br/>
+			数值3：<input type="text"  id="num3"><br/>
+			最大值：<input type="text"  id="max"><br/>
+			<input type="button" onclick="getMaxnum()" value="计算最大值">
+		</form>
+	</body>
+	<script language="JavaScript">									
+			function getMaxnum(){
+			var temp=0;
+			var a=parseInt(document.getElementById("num1").value);
+		
+			var b=parseInt(document.getElementById("num2").value);
+			var c=parseInt(document.getElementById("num3").value);
+	
+				if(a>b){
+					temp=a;	
+				}else {
+					temp=b;	
+				}
+				if(temp>c ){
+					c=temp;
+				}
+				
+				document.getElementById("max").value=c;
+				
+			}
+		</script>
+</html>

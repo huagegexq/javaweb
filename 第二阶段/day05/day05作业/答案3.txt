@@ -1,0 +1,4 @@
+$(function(){
+				var v = $("#pasy tr:eq(3) td:eq(2)");
+				alert(v.text());
+			});

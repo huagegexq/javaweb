@@ -1,0 +1,93 @@
+﻿<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style type="text/css">
+			body{
+				height:400px;
+			}
+			#divFormId{
+				border: 5px solid #999;
+				width: 640px;
+				margin: 0 auto;
+				padding: 20px;
+				background-color: #fff;
+			}
+			#divbg{
+				background: url(/day06/img/regist_bg.jpg);
+				height:100%;
+				padding-top: 80px;
+			}
+			td{
+				padding-top: 10px;
+			}
+			
+		</style>
+		<script>
+			
+		</script>
+	</head>
+
+	<body>
+		<div id="divbg">
+			<div id="divFormId">
+				<form action="#" method="get">
+					<table  width="400">
+						<tr>
+							<td colspan="3">
+								<font color="#3164af" size="5">会员注册</font> USER REGISTER
+							</td>
+						</tr>
+						<tr>
+							<td align="right">用户名</td>
+							<td colspan="2">
+								<input type="text" id="username" name="username" size="40"/>
+							</td>
+						</tr>
+						<tr>
+							<td align="right">密码</td>
+							<td colspan="2">
+								<input type="password" id="pwd" name="pwd" size="40"/>
+							</td>
+						</tr>
+						<tr>
+							<td align="right">确认密码</td>
+							<td colspan="2">
+								<input type="password" id="repwd" name="repwd" size="40"/>
+							</td>
+						</tr>
+						<tr>
+							<td align="right">Email</td>
+							<td colspan="2"><input type="text" id="email" name="email" size="40"/> </td>
+						</tr>
+						
+						<tr>
+							<td align="right">性别</td>
+							<td colspan="2">
+								<input type="radio" name="sex" value="man" checked="checked" />男
+								<input type="radio" name="sex" value="woman" />女
+							</td>
+						</tr>
+						<tr>
+							<td align="right">出生日期</td>
+							<td colspan="2"><input type="text" id="birthday" name="birthday" size="40"/> </td>
+						</tr>
+						<tr>
+							<td width="80" align="right">验证码</td>
+							<td width="100"><input type="text" id="verifyCode" name="verifyCode" /> </td>
+							<td><img src="/day06/img/verifyCode.jpg" /> </td>
+						</tr>
+						<tr>
+							<td></td>
+							<td colspan="2">
+								<input type="image" src="/day06/img/submit.jpg"  /> 
+							</td>
+						</tr>
+					</table>
+
+				</form>
+			</div>
+		</div>
+	</body>
+</html>
