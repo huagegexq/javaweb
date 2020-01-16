@@ -1,0 +1,13 @@
+CREATE TABLE emp (
+id INT PRIMARY KEY AUTO_INCREMENT,
+NAME VARCHAR(10),
+gender CHAR(1), 
+salary DOUBLE, 
+join_date DATE, 
+dept_id INT
+);
+INSERT INTO emp(NAME,gender,salary,join_date,dept_id) VALUES('孙悟空','男',7200,'2013-02-04',1);
+INSERT INTO emp(NAME,gender,salary,join_date,dept_id) VALUES('猪八戒','男',3600,'2010-12-02',2);
+INSERT INTO emp(NAME,gender,salary,join_date,dept_id) VALUES('唐僧','男',9000,'2008-08-08',2);
+INSERT INTO emp(NAME,gender,salary,join_date,dept_id) VALUES('白骨精','女',5000,'2015-10-07',3);
+INSERT INTO emp(NAME,gender,salary,join_date,dept_id) VALUES('蜘蛛精','女',4500,'2011-03-14',1)

@@ -1,0 +1,34 @@
+﻿writer.write("<!DOCTYPE html>\r\n");
+writer.write("<html>\r\n");
+      writer.write("<head>\r\n");
+      writer.write("<meta charset=\"UTF-8\">\r\n");
+      writer.write("<title>Insert title here</title>\r\n");
+      writer.write("</head>\r\n");
+      writer.write("<body>\r\n");
+      writer.write("\t<table border=\"1\" width=\"100%\">\r\n");
+      writer.write("\t\t<tr>\r\n");
+      writer.write("\t\t\t<th>员工序号</th>\r\n");
+      writer.write("\t\t\t<th>员工姓名</th>\r\n");
+      writer.write("\t\t\t<th>员工性别</th>\r\n");
+      writer.write("\t\t\t<th>员工薪资</th>\r\n");
+      writer.write("\t\t\t<th>入职日期</th>\r\n");
+      writer.write("\t\t</tr>\r\n");
+
+      writer.write("\t\t<tr>\r\n");
+      writer.write("\t\t\t<td>1</td>\r\n");
+      writer.write("\t\t\t<td>孙悟空</td>\r\n");
+      writer.write("\t\t\t<td>72</td>\r\n");
+      writer.write("\t\t\t<td>男</td>\r\n");
+      writer.write("\t\t\t<td>花果山</td>\r\n");
+      writer.write("\t\t</tr>\r\n");
+
+      writer.write("\t\t<tr>\r\n");
+      writer.write("\t\t\t<td>2</td>\r\n");
+      writer.write("\t\t\t<td>八戒</td>\r\n");
+      writer.write("\t\t\t<td>36</td>\r\n");
+      writer.write("\t\t\t<td>男</td>\r\n");
+      writer.write("\t\t\t<td>高老庄</td>\r\n");
+      writer.write("\t\t</tr>\r\n");
+      writer.write("\t</table>\r\n");
+      writer.write("</body>\r\n");
+      writer.write("</html>");
