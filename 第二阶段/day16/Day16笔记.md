@@ -219,27 +219,74 @@ Jsp本质：就是一个Servlet
 
 #### 1.3.3、**JSP脚本**
 
+- 脚本片段
+
+  格式：<%java代码%>
+
+  翻译后的位置：_jspService方法内,局部变量
+
+- 声明片段
+
+  格式：<%!java代码%>
+
+  翻译后位置：成员变量位置 
+
+- 输出表达式
+
+  格式：<%=%>
+
+  翻译：_jspService方法内  翻译成 out.print( str );
+
 #### 1.3.4、**JSP注释** 
+
+<%-- JSP注释--%> 
+
+HTML：<!---->
+
+java：//
+
+了解：jsp会对html和java注释进行翻译，jsp的注释不进行翻译(源码上看不到jsp注释)
 
 #### **1.3.5、JSP指令**
 
 ##### **1.3.5.1、指令简述**
+
+作用：在指令中书写相关属性，会将指令相关的翻译成大量的java代码，简化jsp的开发
+
+三大指令：
+
+​	page、include、tagilb
+
+格式：
+
+​	<%@ 指令名称  属性1=“值1”   属性2=“值2” %>
 
 ##### **1.3.5.2、Page指令**
 
 | **属性名称**        | **取值or范围**       | **描述**                                   |
 | --------------- | ---------------- | ---------------------------------------- |
 | pageEncoding    | 当前页面             | 指定页面编码格式                                 |
-| **contentType** | 有效的文档类型          | 客户端浏览器根据该属性判断文档类型                        |
-| **errorPage**   | 某个JSP页面的相对路径     | 指定一个错误页面，如果该JSP程序抛出一个未捕捉的异常，则转到errorPage指定的页面。errorPage指定页面的isErrorPage属性为true，且内置的exception对象为未捕捉的异常 **当前页面出现异常，跳转到哪个页面展示**** ** |
+| **contentType** | 有效的文档类型          | 客户端浏览器根据该属性判断文档类型翻译后代码：response.setContentType("text/html;charset=UTF-8") |
+| **errorPage**   | 某个JSP页面的相对路径     | 指定一个错误页面，如果该JSP程序抛出一个未捕捉的异常，则转到errorPage指定的页面。errorPage指定页面的isErrorPage属性为true，且内置的exception对象为未捕捉的异常 **当前页面出现异常，跳转到哪个页面展示** |
 | **isErrorPage** | true / **false** | 指定该页面是否为错误处理页面，如果为true，则该JSP内置有一个Exception对象的exception，可直接使用。默认情况下，isErrorPage的值为false **设置当前页面是否为标准错误页面**标准错误页面：可以获取并展示跳转而来页面的错误信息isErrorPage设置为true以后，多出一个exception变量exception变量封装了跳转而来页面的异常信息 |
 |                 |                  |                                          |
-| **import**      | 任何包名、类名          | 指定在JSP页面翻译成的Servlet源文件中导入的包或类。import是唯一可以声明多次的page指令属性。一个import属性可以引用多个类，中间用英文逗号隔开。 |
+| **import**      | 任何包名、类名          | 指定在JSP页面翻译成的Servlet源文件中导入的包或类。import是唯一可以声明多次的page指令属性。一个import属性可以引用多个类，中间用英文逗号隔开。import="java.util.*,com.ujiuye.pojo.Emp" 多个包中间用逗号隔开 |
 | language        | java             | 指明解释该JSP文件时采用的语言，默认为Java                 |
 |                 |                  |                                          |
 |                 |                  |                                          |
 
 ##### **1.3.5.3、include指令** 
+
+Java代码中：
+
+​	出现重复使用的代码            抽取成工具类
+
+Jsp中：
+
+```html
+<%@ include file="header.jsp" %>
+<%@ include file="footer.jsp" %>
+```
 
 ##### **1.3.5.4、taglib指令(JSTL中讲)	**
 
@@ -270,13 +317,72 @@ pageContext对象是JSP独有的，普通Servlet没有这个对象。
 作用：
 
 - JSP最小的域对象
+
 - 操作其他作用域 
+
+  ```jsp
+  <%
+  		//pageContext.setAttribute("msg", "哈哈",pageContext.PAGE_SCOPE);
+  	//pageContext.setAttribute("msg", "呵呵",pageContext.REQUEST_SCOPE);
+  	//pageContext.setAttribute("msg", "嘻嘻",pageContext.SESSION_SCOPE);
+  	//pageContext.setAttribute("msg", "嘿嘿",pageContext.APPLICATION_SCOPE);
+  		//request.getRequestDispatcher("/demo3.jsp").forward(request, response);
+  	%>
+  	
+  	<%
+  		//Object msg = pageContext.getAttribute("msg");
+  		//从域对象中取数据  顺序：page -->request-->session-->application
+  		Object msg = pageContext.findAttribute("msg");
+  		out.print(msg);
+  	%>
+  ```
+
+  ​
 
 ##### **1.3.6.3、out对象** 
 
+jsp输出字符流PkServlet输出字符流
+
+![4](image/4.png)
+
 #### **1.3.7、JSP四大作用域总结**
 
+Serlvet三大作用域：request、session、ServletContext
+
+Jsp四大作用域：pageContext、request、session、application
+
 ### 1.4、**使用JSP优化案例代码**
+
+Servlet：
+
+```java
+//3、结果的展示
+		//将elist存到request域对象中
+		request.setAttribute("elist", elist);
+		//跳转到emp_list.jsp
+		request.getRequestDispatcher("/emp_list.jsp").forward(request, response);
+```
+
+emp_list.jsp
+
+```java
+<%
+			//从request域中取数据
+			List<Emp> elist = (List<Emp>) request.getAttribute("elist");
+			for(Emp emp : elist)
+			{
+		%>
+		<tr>
+			<td><%=emp.getId() %></td>
+			<td><%=emp.getName() %></td>
+			<td><%=emp.getGender() %></td>
+			<td><%=emp.getSalary() %></td>
+			<td><%=emp.getJoin_date() %></td>
+		</tr>
+		<%
+		} 
+		%>
+```
 
 ## **2、案例二：展示所有员工信息**
 
@@ -284,17 +390,140 @@ pageContext对象是JSP独有的，普通Servlet没有这个对象。
 
 #### **2.1.1、EL简述**
 
-EL是Expression Language的缩写，它是一种简单的数据访问语言。本节将针对EL表达式进行详细的讲解。
+EL是Expression Language的缩写，它是一种简单的**数据访问语言**。本节将针对EL表达式进行详细的讲解。
 
-EL（Expression Language） 目的：为了使JSP写起来更加简单。表达式语言的灵感来自于 ECMAScript 和 XPath 表达式语言，它提供了在 JSP 中简化表达式的方法，让Jsp的代码更加简化。
+EL（Expression Language） 目的：**为了使JSP写起来更加简单**。表达式语言的灵感来自于 ECMAScript 和 XPath 表达式语言，它提供了在 JSP 中简化表达式的方法，让Jsp的代码更加简化。
 
 #### **2.1.2、EL表达式使用**
 
+格式：${}
+
 ##### **2.1.2.1、入门案例  简单使用EL表达式** 
+
+问题：EL表达式能否在HTMl中使用？不能使用
+
+jsp中可以使用
 
 ##### **2.1.2.2、数据的读取**
 
-##### **2.1.2.3、数据的运算 （域对象）**
+**从域对象中读取数据，**不能读取直接定义的变量
+
+```java
+<%
+		String str = "小白";
+		request.setAttribute("msg", "小红");
+	%>
+	
+	${str}-----${msg}
+```
+
+- Integer、String
+
+- 数组
+
+  ```java
+  <%
+  		//存数组类型
+  		String [] arr = {"三国演义","西游记","红楼梦","水浒传"};
+  		request.setAttribute("arr", arr);
+  	%>
+  	取出西游记：${arr[1]}<br>
+  	取出整个数组：${arr}
+  ```
+
+- List
+
+```java
+<%
+		//存List类型
+		List list = new ArrayList();
+		list.add("三国演义");
+		list.add("西游记");
+		list.add("红楼梦");
+		list.add("水浒传");
+		request.setAttribute("list", list);
+	%>
+	取出西游记：${list[1]}<br>
+	取出整个集合：${list}
+```
+
+- Set集合
+
+  ```java
+  <%
+  		//存Set类型
+  		Set set = new HashSet();
+  		set.add("三国演义");
+  		set.add("西游记");
+  		set.add("红楼梦");
+  		set.add("水浒传");
+  		request.setAttribute("set", set);
+  	%>
+
+  	取出整个集合：${set}
+  ```
+
+- Map集合
+
+  ```java
+  <%
+  		//存Map类型
+  		Map<String,String> map = new HashMap<String,String>();
+  		map.put("name", "悟空");
+  		map.put("age", "500");
+  		map.put("~address", "花果山");
+  		request.setAttribute("map", map);
+  	%>
+  	取出悟空：${map.name}<br>
+  	<!-- 特殊字符形式 -->
+  	取出花果山：${map['~address']}<br>
+  	取出整个集合：${map}
+  ```
+
+- JavaBean
+
+  ```
+  <%
+  		//JavaBean
+  		Emp emp = new Emp();
+  		emp.setName("八戒");
+  		emp.setGender("男");
+  		request.setAttribute("emp", emp);
+  	%>
+  	取出八戒：${emp.name2}
+  ```
+
+  **${emp.name}    相当于调用Emp类中的getName()方法**
+
+  如果使用emp.name2，报以下异常
+
+  ```java
+  javax.el.PropertyNotFoundException: Property [name2] not found on type [com.ujiuye.pojo.Emp]
+  ```
+
+  **${emp}  相当于调用Emp的toString()方法**
+
+- List<JavaBean>
+
+```java
+<%
+		//List<JavaBean>
+		List<Emp> elist = new ArrayList<Emp>();
+		Emp emp = new Emp();
+		emp.setName("八戒");
+		emp.setGender("男");
+		Emp emp2 = new Emp();
+		emp2.setName("白骨精");
+		emp2.setGender("女");
+		elist.add(emp);
+		elist.add(emp2);
+		request.setAttribute("elist", elist);
+	%>
+	取出白骨精：${elist[1].name}
+	整个集合：${elist}
+```
+
+##### 2.1.2.3、数据的运算 （域对象）
 
 对常量进行运算：![img](file:///C:\Users\daidai\AppData\Local\Temp\ksohtml12548\wps35.jpg)   （不频繁）
 
@@ -306,11 +535,104 @@ EL（Expression Language） 目的：为了使JSP写起来更加简单。表达�
 
 ![01](image/03.jpg)
 
+
+
+```java
+<%
+Integer num1 = 5;
+	Integer num2 = 10;
+	request.setAttribute("num1", num1);
+	request.setAttribute("num2", num2);
+	String str1 = "A";
+	String str2 = "3";
+	request.setAttribute("str1", str1);
+	request.setAttribute("str2", str2);
+%>
+${num1 + str1}
+```
+在EL表达式中使用+，仅代表算术运算符，没有拼接的作用
+
+如果要+的字符串不是数字类型，报以下异常
+
+```java
+java.lang.NumberFormatException: For input string: "A"
+```
+
+三元运算符：
+
+${num1<num2?true:false}
+
 ##### 2.1.2.4、数据的判断
+
+判断是否为空的关键字：empty
+
+判断是否不为空的关键字：not empty
+
+- String
+
+  为空的情况：null、""
+
+  ```java
+  <%
+  		String str1 = null;
+  		String str2 = "";
+  		String str3 = "baby";
+  		request.setAttribute("str1", str1);
+  		request.setAttribute("str2", str2);
+  		request.setAttribute("str3", str3);
+  	%>
+  	${empty str1}<br>  //true
+  	${empty str2}<br>   //true
+  	${empty str3}<br>   //false
+  ```
+
+  ​
+
+- JavaBean
+
+  为空的情况：null
+
+  ```java
+  <%
+  Emp emp1 = new Emp();
+  	Emp emp2 = null;
+  	Emp emp3 = new Emp();
+  	emp3.setName("白骨精");
+  	request.setAttribute("emp1", emp1);
+  	request.setAttribute("emp2", emp2);
+  	request.setAttribute("emp3", emp3);
+
+  %>
+  ${empty emp1}<br>//false
+  ${empty emp2}<br>//true
+  ${empty emp3}<br>//false
+  ```
+
+- 集合
+
+  为空的情况：null、集合中没有元素
+
+  ```java
+  <%
+  		List list1 = null;
+  		List list2 = new ArrayList();
+  		List list3 = new ArrayList();
+  		list3.add(1);
+  		request.setAttribute("list1", list1);
+  		request.setAttribute("list2", list2);
+  		request.setAttribute("list3", list3);
+  	
+  	%>
+  	${empty list1}<br>  //true
+  	${empty list2}<br>  //true
+  	${empty list3}<br>  //false
+  ```
 
 ### **2.2、讲解：JSTL标签**
 
 #### **2.2.1、JSTL标签的简述及导入**
+
+注意：使用前必须先导入资料中的jar包
 
 JSTL标签和EL表达式的作用是一样的，简化大量的JSP脚本。
 
@@ -325,11 +647,66 @@ JSTL作用原理和EL表达式一样的，翻译成大段的Java代码来使用�
 | Functions | http://java.sun.com/jsp/jstl/functions | fn     |
 |           |                                        |        |
 
-#### **2.2.2、<c:if>**
+引入对应的标签库：使用taglib指令
+
+
+
+#### 2.2.2、<c:if>
+
+test：判断条件    和EL表达式结合使用
+
+```html
+<c:if test="${not empty str}">
+		str不为空
+	</c:if>
+```
 
 #### **2.2.3、<c:forEach> 		**
 
-### **2.3、案例代码优化** 
+items：要遍历的集合   结合el表达式使用
+
+var：每次遍历集合存放的位置
+
+varStatus：遍历的状态     count：次数(从1开始)   index：索引(从0开始)
+
+```java
+<%
+		//存List类型
+		List list = new ArrayList();
+		list.add("三国演义");
+		list.add("西游记");
+		list.add("红楼梦");
+		list.add("水浒传");
+		request.setAttribute("list", list);
+	%>
+	<c:forEach items="${list}" var="aa" varStatus="vs">
+		${vs.index}：${aa}<br/>
+	</c:forEach>
+```
+
+```html
+<c:forEach begin="1" end="10" var="i" step="2">
+		${i}次
+	</c:forEach>
+```
+
+### 2.3、案例代码优化 
+
+```html
+<c:if test="${not empty elist}">
+		<c:forEach items="${elist}" var="emp" varStatus="vs">
+		<tr>
+			<td>${vs.count}</td>
+			<td>${emp.name}</td>
+			<td>${emp.gender}</td>
+			<td>${emp.salary}</td>
+			<td>${emp.join_date}</td>
+		</tr>
+		</c:forEach>
+		</c:if>
+```
+
+
 
  
 
