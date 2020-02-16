@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<c3p0-config>
+	<!-- 默认配置，如果没有指定则使用这个配置 -->
+
+	<default-config>
+		<!-- 四项基本配置 -->
+		<property name="driverClass">com.mysql.jdbc.Driver</property>
+		<property name="jdbcUrl">jdbc:mysql://localhost:3306/day19</property>
+		<property name="user">root</property>
+		<property name="password">1234</property>
+	
+	
+		
+		<!-- 当连接池用完时客户端调用getConnection()后等待获取新连接的时间，超时后将抛出
+  			SQLException,如设为0则无限期等待。单位毫秒。Default: 0 -->
+		<property name="checkoutTimeout">30000</property>
+		
+		<!--隔多少秒检查连接池的空闲连接，0表示不检查-->
+		<property name="idleConnectionTestPeriod">30</property>
+		
+		<!-- 初始化连接数 -->
+		<property name="initialPoolSize">10</property>
+		
+		<!-- 连接的最大空闲时间，默认为0秒、不会关闭任何连接。设置30秒，30秒到期后，
+			连接若未使用就会被关闭 -->
+		<property name="maxIdleTime">30</property>
+		
+		<!-- 池中最多的连接存放数目 -->
+		<property name="maxPoolSize">100</property>
+		
+		<!-- 池中最少的连接存放数目 -->
+		<property name="minPoolSize">10</property>
+		<property name="maxStatements">200</property>
+		<user-overrides user="test-user">
+			<property name="maxPoolSize">10</property>
+			<property name="minPoolSize">1</property>
+			<property name="maxStatements">0</property>
+		</user-overrides>
+	</default-config>
+	<!-- 命名的配置 -->
+	<named-config name="offcn">
+		<property name="driverClass">com.mysql.jdbc.Driver</property>
+		<property name="jdbcUrl">jdbc:mysql://127.0.0.1:3306/day04_db</property>
+		<property name="user">root</property>
+		<property name="password">1234</property>
+		<property name="acquireIncrement">5</property>
+		<property name="initialPoolSize">20</property>
+		<property name="minPoolSize">10</property>
+		<property name="maxPoolSize">40</property>
+		<property name="maxStatements">0</property>
+		<property name="maxStatementsPerConnection">5</property>
+	</named-config>
+</c3p0-config>

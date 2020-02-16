@@ -1,0 +1,12 @@
+CREATE TABLE `user` (
+  `uid` INT(10) PRIMARY KEY AUTO_INCREMENT,
+  `name` VARCHAR(100) NOT NULL,
+  `sex` INT(1),
+  `phone_number` VARCHAR(20) UNIQUE,
+  `area` VARCHAR(100),
+  `manager` INT(1),
+  `username` VARCHAR(50) UNIQUE,
+  `password` VARCHAR(50) NOT NULL,
+  `photo` VARCHAR(100),
+  `create_time` TIMESTAMP
+) 
