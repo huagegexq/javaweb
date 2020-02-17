@@ -1,0 +1,22 @@
+CREATE TABLE `category` (
+  `cid` int(10) PRIMARY KEY AUTO_INCREMENT,
+  `cname` varchar(50) NOT NULL,
+  `state` int(1) DEFAULT NULL,
+  `order_number` int(5) DEFAULT NULL,
+  `description` varchar(100) DEFAULT NULL,
+  `create_time` datetime
+);
+
+CREATE TABLE `product` (
+  `pid` INT(10) PRIMARY KEY AUTO_INCREMENT,
+  `pname` VARCHAR(50) NOT NULL,
+  `color` VARCHAR(50),
+  `price` DOUBLE NOT NULL,
+  `description` VARCHAR(500),
+  `pic` VARCHAR(200),
+  `state` INT(5) DEFAULT '0',
+  `version` VARCHAR(50),
+  `product_date` DATETIME,
+   cid INT(10)
+) ;
+
